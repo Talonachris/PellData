@@ -1,0 +1,14 @@
+name: PellData
+version: 1.0
+main: com.talona.pellData.PellData
+api-version: 1.21
+author: Talonachris
+description: Tracks player block stats and mob kills.
+
+commands:
+  pelldata:
+    description: Shows block and mob statistics.
+    usage: /pelldata <subcommand>
+    aliases: [pdata]
+    permission: pelldata.use
+    permission-message: You do not have permission to use this command.
