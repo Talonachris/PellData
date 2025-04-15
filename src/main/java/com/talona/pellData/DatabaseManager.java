@@ -1,6 +1,12 @@
 package com.talona.pellData;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class DatabaseManager {
 
@@ -190,5 +196,40 @@ public class DatabaseManager {
         }
 
         return null;
+    }
+    public List<String> getAllStoredPlayerNames() {
+        List<String> names = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT uuid FROM player_stats");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String uuid = rs.getString("uuid");
+                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
+                if (player.getName() != null) {
+                    names.add(player.getName());
+                }
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return names;
+    }
+    public boolean resetStats(String uuid) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("""
+            UPDATE player_stats
+            SET blocks_placed = 0, blocks_broken = 0, killed_mobs = 0
+            WHERE uuid = ?
+        """);
+            ps.setString(1, uuid);
+            int rows = ps.executeUpdate();
+            ps.close();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -8,29 +8,27 @@ public class PellData extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("PellData has been enabled!");
+        getLogger().info("PellData aktiviert ✅");
 
-        // Stelle sicher, dass das Plugin-Verzeichnis existiert
+        // Plugin-Ordner anlegen, falls nicht vorhanden
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
 
-        // Datenbank initialisieren (Datenbankdatei im Plugin-Ordner)
+        // Datenbank initialisieren
         db = new DatabaseManager(getDataFolder().getAbsolutePath() + "/data.db");
 
         // Listener registrieren
         getServer().getPluginManager().registerEvents(new BlockListener(db), this);
         getServer().getPluginManager().registerEvents(new MobKillListener(db), this);
 
-        // CommandHandler registrieren
+        // Commands registrieren
         getCommand("pelldata").setExecutor(new CommandHandler(db));
-        // TabCompleter registrieren
-        getCommand("pelldata").setTabCompleter(new CommandCompleter());
+        getCommand("pelldata").setTabCompleter(new CommandCompleter(db));
     }
-
 
     @Override
     public void onDisable() {
-        getLogger().info("PellData has been disabled.");
+        getLogger().info("PellData deaktiviert ❌");
     }
 }

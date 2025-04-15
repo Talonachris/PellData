@@ -1,5 +1,5 @@
 name: PellData
-version: 1.0
+version: 0.2
 main: com.talona.pellData.PellData
 api-version: 1.21
 author: Talonachris
@@ -12,3 +12,8 @@ commands:
     aliases: [pdata]
     permission: pelldata.use
     permission-message: You do not have permission to use this command.
+
+permissions:
+  pelldata.reset:
+    description: Erlaubt das Zurücksetzen von Statistiken
+    default: op
