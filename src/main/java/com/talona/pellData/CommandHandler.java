@@ -33,25 +33,26 @@ public class CommandHandler implements CommandExecutor {
         switch (sub) {
             case "stats" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|all>");
+                    player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|deaths|all>");
                     return true;
                 }
                 switch (args[1].toLowerCase()) {
                     case "blocks" -> showBlockStats(player);
                     case "killed" -> showMobKills(player);
+                    case "deaths" -> showDeaths(player);
                     case "all" -> showAllStats(player);
-                    default -> player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|all>");
+                    default -> player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|deaths|all>");
                 }
             }
 
             case "ranking" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata ranking <placed|broken|killed>");
+                    player.sendMessage("§7Verwendung: /pelldata ranking <placed|broken|killed|deaths>");
                     return true;
                 }
                 String type = args[1].toLowerCase();
-                if (!type.equals("placed") && !type.equals("broken") && !type.equals("killed")) {
-                    player.sendMessage("§7Ungültiger Typ. Verwende: placed, broken, killed");
+                if (!type.equals("placed") && !type.equals("broken") && !type.equals("killed") && !type.equals("deaths")) {
+                    player.sendMessage("§7Ungültiger Typ. Verwende: placed, broken, killed, deaths");
                     return true;
                 }
                 showRanking(player, type);
@@ -99,15 +100,25 @@ public class CommandHandler implements CommandExecutor {
         player.sendMessage("§eMobs getötet: §f" + kills);
     }
 
+    private void showDeaths(Player player) {
+        String uuid = player.getUniqueId().toString();
+        int deaths = db.getDeaths(uuid);
+        player.sendMessage("§6Deine Todes-Statistik:");
+        player.sendMessage("§eTode: §f" + deaths);
+    }
+
     private void showAllStats(Player player) {
         String uuid = player.getUniqueId().toString();
         int placed = db.getBlocksPlaced(uuid);
         int broken = db.getBlocksBroken(uuid);
         int kills = db.getMobsKilled(uuid);
+        int deaths = db.getDeaths(uuid);
+
         player.sendMessage("§6Deine Gesamtstatistik:");
         player.sendMessage("§eGesetzt: §f" + placed);
         player.sendMessage("§eAbgebaut: §f" + broken);
         player.sendMessage("§eMobs getötet: §f" + kills);
+        player.sendMessage("§eTode: §f" + deaths);
     }
 
     private void showRanking(Player player, String type) {
@@ -135,6 +146,7 @@ public class CommandHandler implements CommandExecutor {
         int placed = db.getBlocksPlaced(uuid);
         int broken = db.getBlocksBroken(uuid);
         int killed = db.getMobsKilled(uuid);
+        int deaths = db.getDeaths(uuid);
 
         String name = (target.getName() != null) ? target.getName() : uuid;
 
@@ -142,6 +154,7 @@ public class CommandHandler implements CommandExecutor {
         sender.sendMessage("§eGesetzt: §f" + placed);
         sender.sendMessage("§eAbgebaut: §f" + broken);
         sender.sendMessage("§eMobs getötet: §f" + killed);
+        sender.sendMessage("§eTode: §f" + deaths);
     }
 
     private void resetPlayerStats(Player sender, String targetName) {

@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class CommandCompleter implements TabCompleter {
 
     private final List<String> firstArgs = Arrays.asList("stats", "ranking", "player", "reset");
-    private final List<String> rankingArgs = Arrays.asList("placed", "broken", "killed");
-    private final List<String> statsArgs = Arrays.asList("blocks", "killed", "all");
+    private final List<String> rankingArgs = Arrays.asList("placed", "broken", "killed", "deaths"); // <– NEU
+    private final List<String> statsArgs = Arrays.asList("blocks", "killed", "deaths", "all");      // <– NEU
 
     private final DatabaseManager db;
 
