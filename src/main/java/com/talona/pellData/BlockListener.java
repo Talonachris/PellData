@@ -19,12 +19,24 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        db.incrementBlockPlaced(player.getUniqueId().toString());
+        Block block = event.getBlock();
+
+        String uuid = player.getUniqueId().toString();
+        Material material = block.getType();
+
+        db.incrementBlockPlaced(uuid);              // zählt gesamt
+        db.incrementBlockPlaced(uuid, material);    // zählt Typ
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        db.incrementBlockBroken(player.getUniqueId().toString());
+        Block block = event.getBlock();
+
+        String uuid = player.getUniqueId().toString();
+        Material material = block.getType();
+
+        db.incrementBlockBroken(uuid);              // zählt gesamt
+        db.incrementBlockBroken(uuid, material);    // zählt Typ
     }
 }

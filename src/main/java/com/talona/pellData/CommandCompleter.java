@@ -1,6 +1,5 @@
 package com.talona.pellData;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -12,8 +11,8 @@ import java.util.stream.Collectors;
 public class CommandCompleter implements TabCompleter {
 
     private final List<String> firstArgs = Arrays.asList("stats", "ranking", "player", "reset");
-    private final List<String> rankingArgs = Arrays.asList("placed", "broken", "killed", "deaths"); // <– NEU
-    private final List<String> statsArgs = Arrays.asList("blocks", "killed", "deaths", "all");      // <– NEU
+    private final List<String> rankingArgs = Arrays.asList("placed", "broken", "killed", "deaths", "playtime", "chat");
+    private final List<String> statsArgs = Arrays.asList("blocks", "killed", "deaths", "playtime", "chat", "all", "topplaced", "topbroken");
 
     private final DatabaseManager db;
 

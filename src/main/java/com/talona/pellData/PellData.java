@@ -22,6 +22,10 @@ public class PellData extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockListener(db), this);
         getServer().getPluginManager().registerEvents(new MobKillListener(db), this);
         getServer().getPluginManager().registerEvents(new DeathListener(db), this);
+        getServer().getPluginManager().registerEvents(new PlaytimeListener(db, this), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(db), this);
+
+
 
         // Commands registrieren
         getCommand("pelldata").setExecutor(new CommandHandler(db));

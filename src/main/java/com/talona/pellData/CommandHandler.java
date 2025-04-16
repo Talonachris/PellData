@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class CommandHandler implements CommandExecutor {
@@ -33,26 +35,29 @@ public class CommandHandler implements CommandExecutor {
         switch (sub) {
             case "stats" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|deaths|all>");
+                    player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|deaths|playtime|chat|all|topplaced|topbroken>");
                     return true;
                 }
                 switch (args[1].toLowerCase()) {
                     case "blocks" -> showBlockStats(player);
                     case "killed" -> showMobKills(player);
                     case "deaths" -> showDeaths(player);
+                    case "playtime" -> showPlaytime(player);
+                    case "chat" -> showChatMessages(player);
                     case "all" -> showAllStats(player);
-                    default -> player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|deaths|all>");
+                    case "topplaced" -> showTopPlaced(player);
+                    case "topbroken" -> showTopBroken(player);
+                    default -> player.sendMessage("§7Unbekanntes Argument.");
                 }
             }
-
             case "ranking" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata ranking <placed|broken|killed|deaths>");
+                    player.sendMessage("§7Verwendung: /pelldata ranking <placed|broken|killed|deaths|playtime|chat>");
                     return true;
                 }
                 String type = args[1].toLowerCase();
-                if (!type.equals("placed") && !type.equals("broken") && !type.equals("killed") && !type.equals("deaths")) {
-                    player.sendMessage("§7Ungültiger Typ. Verwende: placed, broken, killed, deaths");
+                if (!List.of("placed", "broken", "killed", "deaths", "playtime", "chat").contains(type)) {
+                    player.sendMessage("§7Ungültiger Typ. Verwende: placed, broken, killed, deaths, playtime, chat");
                     return true;
                 }
                 showRanking(player, type);
@@ -107,18 +112,55 @@ public class CommandHandler implements CommandExecutor {
         player.sendMessage("§eTode: §f" + deaths);
     }
 
+    private void showPlaytime(Player player) {
+        String uuid = player.getUniqueId().toString();
+        int seconds = db.getPlaytime(uuid);
+        String formatted = formatPlaytime(seconds);
+        player.sendMessage("§6Deine Gesamtspielzeit:");
+        player.sendMessage("§e" + formatted);
+    }
+
+    private void showChatMessages(Player player) {
+        String uuid = player.getUniqueId().toString();
+        int messages = db.getChatMessages(uuid);
+        player.sendMessage("§6Deine Chat-Statistik:");
+        player.sendMessage("§eNachrichten gesendet: §f" + messages);
+    }
+
     private void showAllStats(Player player) {
         String uuid = player.getUniqueId().toString();
         int placed = db.getBlocksPlaced(uuid);
         int broken = db.getBlocksBroken(uuid);
         int kills = db.getMobsKilled(uuid);
         int deaths = db.getDeaths(uuid);
+        int playtime = db.getPlaytime(uuid);
+        int messages = db.getChatMessages(uuid);
+        String formatted = formatPlaytime(playtime);
 
         player.sendMessage("§6Deine Gesamtstatistik:");
         player.sendMessage("§eGesetzt: §f" + placed);
         player.sendMessage("§eAbgebaut: §f" + broken);
         player.sendMessage("§eMobs getötet: §f" + kills);
         player.sendMessage("§eTode: §f" + deaths);
+        player.sendMessage("§eSpielzeit: §f" + formatted);
+        player.sendMessage("§eNachrichten gesendet: §f" + messages);
+    }
+    private void showTopPlaced(Player player) {
+        Map<String, Integer> top = db.getTopPlacedBlocks(player.getUniqueId().toString());
+        player.sendMessage("§6Top 10 gesetzte Blöcke:");
+        int i = 1;
+        for (var entry : top.entrySet()) {
+            player.sendMessage("§e" + i++ + ". " + entry.getKey() + " – " + entry.getValue());
+        }
+    }
+
+    private void showTopBroken(Player player) {
+        Map<String, Integer> top = db.getTopBrokenBlocks(player.getUniqueId().toString());
+        player.sendMessage("§6Top 10 abgebaut:");
+        int i = 1;
+        for (var entry : top.entrySet()) {
+            player.sendMessage("§e" + i++ + ". " + entry.getKey() + " – " + entry.getValue());
+        }
     }
 
     private void showRanking(Player player, String type) {
@@ -130,6 +172,11 @@ public class CommandHandler implements CommandExecutor {
                 String value = entry[1];
                 OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
                 String name = (p != null && p.getName() != null) ? p.getName() : uuid;
+
+                if (type.equals("playtime")) {
+                    value = formatPlaytime(Integer.parseInt(value));
+                }
+
                 player.sendMessage("§e#" + (i + 1) + " §f" + name + " §7– §a" + value);
             }
         }
@@ -147,7 +194,9 @@ public class CommandHandler implements CommandExecutor {
         int broken = db.getBlocksBroken(uuid);
         int killed = db.getMobsKilled(uuid);
         int deaths = db.getDeaths(uuid);
-
+        int playtime = db.getPlaytime(uuid);
+        int messages = db.getChatMessages(uuid);
+        String formatted = formatPlaytime(playtime);
         String name = (target.getName() != null) ? target.getName() : uuid;
 
         sender.sendMessage("§6Statistiken für §f" + name + ":");
@@ -155,6 +204,8 @@ public class CommandHandler implements CommandExecutor {
         sender.sendMessage("§eAbgebaut: §f" + broken);
         sender.sendMessage("§eMobs getötet: §f" + killed);
         sender.sendMessage("§eTode: §f" + deaths);
+        sender.sendMessage("§eSpielzeit: §f" + formatted);
+        sender.sendMessage("§eNachrichten gesendet: §f" + messages);
     }
 
     private void resetPlayerStats(Player sender, String targetName) {
@@ -172,5 +223,11 @@ public class CommandHandler implements CommandExecutor {
         } else {
             sender.sendMessage("§cFehler beim Zurücksetzen.");
         }
+    }
+
+    private String formatPlaytime(int totalSeconds) {
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        return hours + " Stunden, " + minutes + " Minuten";
     }
 }

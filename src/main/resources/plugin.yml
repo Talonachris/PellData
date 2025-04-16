@@ -1,5 +1,5 @@
 name: PellData
-version: 0.3
+version: 0.4
 main: com.talona.pellData.PellData
 api-version: 1.21
 author: Talonachris
