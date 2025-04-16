@@ -14,20 +14,22 @@ import java.util.UUID;
 public class CommandHandler implements CommandExecutor {
 
     private final DatabaseManager db;
+    private final LocalesManager locales;
 
-    public CommandHandler(DatabaseManager db) {
+    public CommandHandler(DatabaseManager db, LocalesManager locales) {
         this.db = db;
+        this.locales = locales;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("Nur Spieler können diesen Befehl ausführen.");
+            sender.sendMessage(locales.get(null, "error.not_player"));
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage("§7Verwendung: /pelldata <stats|ranking|player|reset>");
+            player.sendMessage(locales.getPrefixed(player, "help.usage"));
             return true;
         }
 
@@ -35,29 +37,31 @@ public class CommandHandler implements CommandExecutor {
         switch (sub) {
             case "stats" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata stats <blocks|killed|deaths|playtime|chat|all|topplaced|topbroken>");
+                    player.sendMessage(locales.getPrefixed(player, "help.stats.usage"));
                     return true;
                 }
                 switch (args[1].toLowerCase()) {
                     case "blocks" -> showBlockStats(player);
                     case "killed" -> showMobKills(player);
+                    case "pvp" -> showPvPKills(player);
                     case "deaths" -> showDeaths(player);
                     case "playtime" -> showPlaytime(player);
                     case "chat" -> showChatMessages(player);
                     case "all" -> showAllStats(player);
                     case "topplaced" -> showTopPlaced(player);
                     case "topbroken" -> showTopBroken(player);
-                    default -> player.sendMessage("§7Unbekanntes Argument.");
+                    case "topmobs" -> showTopMobs(player);
+                    default -> player.sendMessage(locales.getPrefixed(player, "error.unknown_subcommand"));
                 }
             }
             case "ranking" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata ranking <placed|broken|killed|deaths|playtime|chat>");
+                    player.sendMessage(locales.getPrefixed(player, "help.ranking.usage"));
                     return true;
                 }
                 String type = args[1].toLowerCase();
-                if (!List.of("placed", "broken", "killed", "deaths", "playtime", "chat").contains(type)) {
-                    player.sendMessage("§7Ungültiger Typ. Verwende: placed, broken, killed, deaths, playtime, chat");
+                if (!List.of("placed", "broken", "killed", "deaths", "playtime", "chat", "pvp").contains(type)) {
+                    player.sendMessage(locales.getPrefixed(player, "error.invalid_type"));
                     return true;
                 }
                 showRanking(player, type);
@@ -65,7 +69,7 @@ public class CommandHandler implements CommandExecutor {
 
             case "player" -> {
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata player <Spielername>");
+                    player.sendMessage(locales.getPrefixed(player, "help.player.usage"));
                     return true;
                 }
                 showPlayerStats(player, args[1]);
@@ -73,17 +77,21 @@ public class CommandHandler implements CommandExecutor {
 
             case "reset" -> {
                 if (!player.hasPermission("pelldata.reset")) {
-                    player.sendMessage("§cDu hast keine Berechtigung für diesen Befehl.");
+                    player.sendMessage(locales.getPrefixed(player, "error.no_permission"));
                     return true;
                 }
                 if (args.length < 2) {
-                    player.sendMessage("§7Verwendung: /pelldata reset <Spielername>");
+                    player.sendMessage(locales.getPrefixed(player, "help.reset.usage"));
                     return true;
                 }
                 resetPlayerStats(player, args[1]);
             }
 
-            default -> player.sendMessage("§7Unbekannter Subcommand. Nutze: /pelldata <stats|ranking|player|reset>");
+            case "globalstats" -> {
+                showGlobalStats(player);
+            }
+
+            default -> player.sendMessage(locales.getPrefixed(player, "error.unknown_subcommand"));
         }
 
         return true;
@@ -93,58 +101,49 @@ public class CommandHandler implements CommandExecutor {
         String uuid = player.getUniqueId().toString();
         int placed = db.getBlocksPlaced(uuid);
         int broken = db.getBlocksBroken(uuid);
-        player.sendMessage("§6Deine Block-Statistiken:");
-        player.sendMessage("§eGesetzt: §f" + placed);
-        player.sendMessage("§eAbgebaut: §f" + broken);
+        String msg = locales.getPrefixed(player, "stats.blocks")
+                .replace("{placed}", String.valueOf(placed))
+                .replace("{broken}", String.valueOf(broken));
+        player.sendMessage(msg);
     }
 
     private void showMobKills(Player player) {
-        String uuid = player.getUniqueId().toString();
-        int kills = db.getMobsKilled(uuid);
-        player.sendMessage("§6Deine Mob-Kill-Statistiken:");
-        player.sendMessage("§eMobs getötet: §f" + kills);
+        int kills = db.getMobsKilled(player.getUniqueId().toString());
+        player.sendMessage(locales.getPrefixed(player, "stats.killed").replace("{killed}", String.valueOf(kills)));
+    }
+
+    private void showPvPKills(Player player) {
+        int pvp = db.getPvPKills(player.getUniqueId().toString());
+        player.sendMessage(locales.getPrefixed(player, "stats.pvp").replace("{pvp}", String.valueOf(pvp)));
     }
 
     private void showDeaths(Player player) {
-        String uuid = player.getUniqueId().toString();
-        int deaths = db.getDeaths(uuid);
-        player.sendMessage("§6Deine Todes-Statistik:");
-        player.sendMessage("§eTode: §f" + deaths);
+        int deaths = db.getDeaths(player.getUniqueId().toString());
+        player.sendMessage(locales.getPrefixed(player, "stats.deaths").replace("{deaths}", String.valueOf(deaths)));
     }
 
     private void showPlaytime(Player player) {
-        String uuid = player.getUniqueId().toString();
-        int seconds = db.getPlaytime(uuid);
+        int seconds = db.getPlaytime(player.getUniqueId().toString());
         String formatted = formatPlaytime(seconds);
-        player.sendMessage("§6Deine Gesamtspielzeit:");
-        player.sendMessage("§e" + formatted);
+        player.sendMessage(locales.getPrefixed(player, "stats.playtime").replace("{playtime}", formatted));
     }
 
     private void showChatMessages(Player player) {
-        String uuid = player.getUniqueId().toString();
-        int messages = db.getChatMessages(uuid);
-        player.sendMessage("§6Deine Chat-Statistik:");
-        player.sendMessage("§eNachrichten gesendet: §f" + messages);
+        int messages = db.getChatMessages(player.getUniqueId().toString());
+        player.sendMessage(locales.getPrefixed(player, "stats.chat").replace("{chat}", String.valueOf(messages)));
     }
 
     private void showAllStats(Player player) {
-        String uuid = player.getUniqueId().toString();
-        int placed = db.getBlocksPlaced(uuid);
-        int broken = db.getBlocksBroken(uuid);
-        int kills = db.getMobsKilled(uuid);
-        int deaths = db.getDeaths(uuid);
-        int playtime = db.getPlaytime(uuid);
-        int messages = db.getChatMessages(uuid);
-        String formatted = formatPlaytime(playtime);
+        player.sendMessage(locales.getPrefixed(player, "stats.all.title"));
 
-        player.sendMessage("§6Deine Gesamtstatistik:");
-        player.sendMessage("§eGesetzt: §f" + placed);
-        player.sendMessage("§eAbgebaut: §f" + broken);
-        player.sendMessage("§eMobs getötet: §f" + kills);
-        player.sendMessage("§eTode: §f" + deaths);
-        player.sendMessage("§eSpielzeit: §f" + formatted);
-        player.sendMessage("§eNachrichten gesendet: §f" + messages);
+        showBlockStats(player);
+        showMobKills(player);
+        showPvPKills(player);
+        showDeaths(player);
+        showPlaytime(player);
+        showChatMessages(player);
     }
+
     private void showTopPlaced(Player player) {
         Map<String, Integer> top = db.getTopPlacedBlocks(player.getUniqueId().toString());
         player.sendMessage("§6Top 10 gesetzte Blöcke:");
@@ -160,6 +159,20 @@ public class CommandHandler implements CommandExecutor {
         int i = 1;
         for (var entry : top.entrySet()) {
             player.sendMessage("§e" + i++ + ". " + entry.getKey() + " – " + entry.getValue());
+        }
+    }
+
+    private void showTopMobs(Player player) {
+        Map<String, Integer> top = db.getTopKilledMobs(player.getUniqueId().toString());
+        if (top.isEmpty()) {
+            player.sendMessage("§7Du hast bisher keine Mobs getötet.");
+            return;
+        }
+
+        player.sendMessage("§6Top 10 getötete Mobs:");
+        int i = 1;
+        for (var entry : top.entrySet()) {
+            player.sendMessage("§e" + i++ + ". §f" + entry.getKey() + " – " + entry.getValue());
         }
     }
 
@@ -184,50 +197,61 @@ public class CommandHandler implements CommandExecutor {
 
     private void showPlayerStats(Player sender, String targetName) {
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
-        if (target == null) {
-            sender.sendMessage("§cSpieler konnte nicht gefunden werden.");
+        if (target == null || target.getUniqueId() == null) {
+            sender.sendMessage(locales.getPrefixed(sender, "error.player_not_found"));
             return;
         }
 
         String uuid = target.getUniqueId().toString();
-        int placed = db.getBlocksPlaced(uuid);
-        int broken = db.getBlocksBroken(uuid);
-        int killed = db.getMobsKilled(uuid);
-        int deaths = db.getDeaths(uuid);
-        int playtime = db.getPlaytime(uuid);
-        int messages = db.getChatMessages(uuid);
-        String formatted = formatPlaytime(playtime);
-        String name = (target.getName() != null) ? target.getName() : uuid;
+        String name = target.getName() != null ? target.getName() : uuid;
 
-        sender.sendMessage("§6Statistiken für §f" + name + ":");
-        sender.sendMessage("§eGesetzt: §f" + placed);
-        sender.sendMessage("§eAbgebaut: §f" + broken);
-        sender.sendMessage("§eMobs getötet: §f" + killed);
-        sender.sendMessage("§eTode: §f" + deaths);
-        sender.sendMessage("§eSpielzeit: §f" + formatted);
-        sender.sendMessage("§eNachrichten gesendet: §f" + messages);
+        sender.sendMessage(locales.getPrefixed(sender, "stats.player.title").replace("{name}", name));
+
+        showBlockStats((Player) sender);
+        showMobKills((Player) sender);
+        showPvPKills((Player) sender);
+        showDeaths((Player) sender);
+        showPlaytime((Player) sender);
+        showChatMessages((Player) sender);
     }
 
     private void resetPlayerStats(Player sender, String targetName) {
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
-        if (target == null) {
-            sender.sendMessage("§cSpieler konnte nicht gefunden werden.");
+        if (target == null || target.getUniqueId() == null) {
+            sender.sendMessage(locales.getPrefixed(sender, "error.player_not_found"));
             return;
         }
 
         String uuid = target.getUniqueId().toString();
-        boolean success = db.resetStats(uuid);
-
-        if (success) {
-            sender.sendMessage("§aStatistiken von §e" + (target.getName() != null ? target.getName() : uuid) + " §awurden zurückgesetzt.");
+        if (db.resetStats(uuid)) {
+            sender.sendMessage(locales.getPrefixed(sender, "stats.reset.success")
+                    .replace("{name}", target.getName() != null ? target.getName() : uuid));
         } else {
-            sender.sendMessage("§cFehler beim Zurücksetzen.");
+            sender.sendMessage(locales.getPrefixed(sender, "error.reset_failed"));
         }
     }
 
-    private String formatPlaytime(int totalSeconds) {
-        int hours = totalSeconds / 3600;
-        int minutes = (totalSeconds % 3600) / 60;
-        return hours + " Stunden, " + minutes + " Minuten";
+    private String formatPlaytime(int seconds) {
+        int h = seconds / 3600;
+        int m = (seconds % 3600) / 60;
+        return h + "h " + m + "m";
+    }
+
+    private void showGlobalStats(Player player) {
+        int placed = db.getTotalBlocksPlaced();
+        int broken = db.getTotalBlocksBroken();
+        int killed = db.getTotalMobKills();
+        int pvp = db.getTotalPvPKills();
+        int deaths = db.getTotalDeaths();
+        int chat = db.getTotalChatMessages();
+        String playtime = formatPlaytime(db.getTotalPlaytime());
+
+        player.sendMessage(locales.getPrefixed(player, "stats.global.title"));
+        player.sendMessage(locales.getPrefixed(player, "stats.blocks").replace("{placed}", String.valueOf(placed)).replace("{broken}", String.valueOf(broken)));
+        player.sendMessage(locales.getPrefixed(player, "stats.killed").replace("{killed}", String.valueOf(killed)));
+        player.sendMessage(locales.getPrefixed(player, "stats.pvp").replace("{pvp}", String.valueOf(pvp)));
+        player.sendMessage(locales.getPrefixed(player, "stats.deaths").replace("{deaths}", String.valueOf(deaths)));
+        player.sendMessage(locales.getPrefixed(player, "stats.playtime").replace("{playtime}", playtime));
+        player.sendMessage(locales.getPrefixed(player, "stats.chat").replace("{chat}", String.valueOf(chat)));
     }
 }

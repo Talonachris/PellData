@@ -14,7 +14,6 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        String uuid = event.getPlayer().getUniqueId().toString();
-        db.incrementChatMessages(uuid);
+        db.incrementChatMessages(event.getPlayer().getUniqueId().toString());
     }
 }

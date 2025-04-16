@@ -20,6 +20,19 @@ public class DatabaseManager {
         }
     }
 
+    public void incrementMobKillType(String uuid, String mobType) {
+        try (PreparedStatement ps = connection.prepareStatement("""
+        INSERT INTO mob_kill_stats (uuid, mob_type, count)
+        VALUES (?, ?, 1)
+        ON CONFLICT(uuid, mob_type) DO UPDATE SET count = count + 1;
+    """)) {
+            ps.setString(1, uuid);
+            ps.setString(2, mobType);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private void createTables() {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("""
@@ -30,7 +43,8 @@ public class DatabaseManager {
                     killed_mobs INTEGER DEFAULT 0,
                     deaths INTEGER DEFAULT 0,
                     playtime_seconds INTEGER DEFAULT 0,
-                    chat_messages INTEGER DEFAULT 0
+                    chat_messages INTEGER DEFAULT 0,
+                    pvp_kills INTEGER DEFAULT 0
                 );
             """);
 
@@ -51,11 +65,29 @@ public class DatabaseManager {
                     PRIMARY KEY (uuid, block_type)
                 );
             """);
+            stmt.execute("""
+    CREATE TABLE IF NOT EXISTS mob_kill_stats (
+        uuid TEXT,
+        mob_type TEXT,
+        count INTEGER DEFAULT 0,
+        PRIMARY KEY (uuid, mob_type)
+    );
+""");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public void incrementPvPKills(String uuid) {
+        ensurePlayerRecord(uuid);
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE player_stats SET pvp_kills = pvp_kills + 1 WHERE uuid = ?")) {
+            ps.setString(1, uuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private void ensurePlayerRecord(String uuid) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT OR IGNORE INTO player_stats (uuid) VALUES (?)")) {
@@ -131,6 +163,22 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getTotalPvPKills() {
+        return getSum("pvp_kills");
+    }
+    public int getPvPKills(String uuid) {
+        ensurePlayerRecord(uuid);
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT pvp_kills FROM player_stats WHERE uuid = ?")) {
+            ps.setString(1, uuid);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("pvp_kills");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public int getChatMessages(String uuid) {
@@ -237,6 +285,25 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
+    public Map<String, Integer> getTopKilledMobs(String uuid) {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        try (PreparedStatement ps = connection.prepareStatement("""
+        SELECT mob_type, count FROM mob_kill_stats
+        WHERE uuid = ?
+        ORDER BY count DESC
+        LIMIT 10;
+    """)) {
+            ps.setString(1, uuid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                result.put(rs.getString("mob_type"), rs.getInt("count"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public Map<String, Integer> getTopPlacedBlocks(String uuid) {
         Map<String, Integer> result = new LinkedHashMap<>();
@@ -285,6 +352,8 @@ public class DatabaseManager {
                 case "deaths" -> "SELECT uuid, deaths AS value FROM player_stats ORDER BY deaths DESC LIMIT ?, 1";
                 case "playtime" -> "SELECT uuid, playtime_seconds AS value FROM player_stats ORDER BY playtime_seconds DESC LIMIT ?, 1";
                 case "chat" -> "SELECT uuid, chat_messages AS value FROM player_stats ORDER BY chat_messages DESC LIMIT ?, 1";
+                case "pvp" -> "SELECT uuid, pvp_kills AS value FROM player_stats ORDER BY pvp_kills DESC LIMIT ?, 1";
+
                 default -> null;
             };
 
@@ -312,7 +381,8 @@ public class DatabaseManager {
                 killed_mobs = 0,
                 deaths = 0,
                 playtime_seconds = 0,
-                chat_messages = 0
+                chat_messages = 0,
+                pvp_kills = 0
             WHERE uuid = ?
         """)) {
             ps.setString(1, uuid);
@@ -337,5 +407,41 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return names;
+    }
+    public int getTotalBlocksPlaced() {
+        return getSum("blocks_placed");
+    }
+
+    public int getTotalBlocksBroken() {
+        return getSum("blocks_broken");
+    }
+
+    public int getTotalMobKills() {
+        return getSum("killed_mobs");
+    }
+
+    public int getTotalDeaths() {
+        return getSum("deaths");
+    }
+
+    public int getTotalChatMessages() {
+        return getSum("chat_messages");
+    }
+
+    public int getTotalPlaytime() {
+        return getSum("playtime_seconds");
+    }
+
+    private int getSum(String column) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT SUM(" + column + ") AS total FROM player_stats")) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

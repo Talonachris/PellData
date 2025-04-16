@@ -17,26 +17,20 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        Block block = event.getBlock();
-
-        String uuid = player.getUniqueId().toString();
-        Material material = block.getType();
-
-        db.incrementBlockPlaced(uuid);              // zählt gesamt
-        db.incrementBlockPlaced(uuid, material);    // zählt Typ
+        Block block = event.getBlockPlaced();
+        db.incrementBlockPlaced(player.getUniqueId().toString());
+        db.incrementBlockPlaced(player.getUniqueId().toString(), block.getType());
     }
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-
-        String uuid = player.getUniqueId().toString();
-        Material material = block.getType();
-
-        db.incrementBlockBroken(uuid);              // zählt gesamt
-        db.incrementBlockBroken(uuid, material);    // zählt Typ
+        if (block.getType() != Material.AIR) {
+            db.incrementBlockBroken(player.getUniqueId().toString());
+            db.incrementBlockBroken(player.getUniqueId().toString(), block.getType());
+        }
     }
 }

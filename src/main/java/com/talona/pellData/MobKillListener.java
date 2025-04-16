@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class MobKillListener implements Listener {
 
-    private DatabaseManager db;
+    private final DatabaseManager db;
 
     public MobKillListener(DatabaseManager db) {
         this.db = db;
@@ -21,18 +21,16 @@ public class MobKillListener implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         Entity entity = event.getEntity();
 
-        // Nur auf Mobs achten (keine Spieler zählen)
-        if (!(entity instanceof LivingEntity)) return;  // Sicherstellen, dass es ein lebendes Wesen ist
+        // Nur lebende Nicht-Spieler-Mobs zählen
+        if (!(entity instanceof LivingEntity livingEntity)) return;
 
-        // Wenn der Mob von einem Spieler getötet wurde, den Spieler holen
-        Player player = ((LivingEntity) entity).getKiller();  // getKiller() gibt den Spieler zurück, der den Mob getötet hat
+        Player killer = livingEntity.getKiller();
+        if (killer != null) {
+            UUID uuid = killer.getUniqueId();
+            String mobType = entity.getType().name(); // z. B. ZOMBIE, CREEPER
 
-        if (player != null) {
-            UUID playerUUID = player.getUniqueId();
-
-            // Mob-Kills in der Datenbank aktualisieren
-            db.incrementMobKills(playerUUID.toString());  // Übergeben der UUID als String
+            db.incrementMobKills(uuid.toString());                // Gesamtzahl Mobs
+            db.incrementMobKillType(uuid.toString(), mobType);    // Typ-spezifisch
         }
     }
 }
-
