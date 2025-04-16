@@ -1,3 +1,5 @@
+![PellData Banner](./A_2D_digital_graphic_banner_displays_promotional_i.png)
+
 # PellData
 
 _A lightweight and powerful player statistics plugin for your Minecraft server._  
