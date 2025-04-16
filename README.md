@@ -1,64 +1,67 @@
 # PellData
-_A lightweight and powerful player statistics plugin for your Minecraft server._
+
+_A lightweight and powerful player statistics plugin for your Minecraft server._  
+_Ein leichtgewichtiges und mächtiges Statistik-Plugin für deinen Minecraft-Server._
 
 ---
 
-## 📋 About
+## 📋 About / Über das Plugin
 
-**PellData** is a stats tracking plugin that logs various player actions like block placements, kills, deaths, chat messages, playtime, and more.  
+**EN:** PellData is a stats tracking plugin that logs player actions like block placements, kills, deaths, chat messages, playtime, and more.  
 It supports localization, PlaceholderAPI integration, and both player and global statistics.
 
-It stores data in a **SQLite database**, tracks **every block type separately**, and is fully designed to be performance-friendly and modular.
+**DE:** PellData ist ein Statistik-Plugin, das Spieleraktionen wie Blockplatzierungen, Kills, Tode, Chatnachrichten, Spielzeit u. v. m. speichert.  
+Es unterstützt Lokalisierung, PlaceholderAPI und sowohl globale als auch spielerspezifische Statistiken.
 
-> This plugin was built entirely with the help of AI – because I wanted a custom stats system like this for my server, but couldn't find anything that fit.  
-> Suggestions and ideas are always welcome!
+→ Data is stored in a **local SQLite database**  
+→ Jeder Blocktyp wird einzeln gespeichert
 
----
-
-## 🧩 Dependencies
-
-This plugin **requires** [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/).
-
-Make sure you install it before using PellData.
+> 💡 This plugin was entirely created using AI – because I wanted my own and couldn’t find a good alternative.  
+> Dieses Plugin wurde vollständig mit AI entwickelt – weil ich genau sowas haben wollte.  
+> 💬 Suggestions welcome!
 
 ---
 
-## 💬 Commands
+## 🧩 Dependencies / Abhängigkeiten
 
-| Command | Description |
-|--------|-------------|
-| `/pelldata stats` | Show player stats |
-| `/pelldata stats blocks` | Show placed & broken blocks |
-| `/pelldata stats killed` | Show killed mobs |
-| `/pelldata stats pvp` | Show PvP kills |
-| `/pelldata stats deaths` | Show death count |
-| `/pelldata stats playtime` | Show total playtime |
-| `/pelldata stats chat` | Show chat message count |
-| `/pelldata stats all` | Show all stats |
-| `/pelldata stats topplaced` | Show top 10 blocks placed (by type) |
-| `/pelldata stats topbroken` | Show top 10 blocks broken (by type) |
-| `/pelldata stats topmobs` | Show top 10 mob types killed |
-| `/pelldata ranking <type>` | Show leaderboard for a stat (type: placed, broken, killed, pvp, chat, deaths, playtime) |
-| `/pelldata player <name>` | View another player's stats |
-| `/pelldata globalstats` | View global server-wide statistics |
-| `/pelldata reset <name>` | Reset a player’s stats (requires permission) |
+This plugin **requires / benötigt** [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/).
 
 ---
 
-## 🔐 Permissions
+## 💬 Commands / Befehle
+
+| Command / Befehl | Description / Beschreibung |
+|------------------|-----------------------------|
+| `/pelldata stats` | Show player stats / Spielerstatistik |
+| `/pelldata stats blocks` | Blocks placed & broken / Blöcke gesetzt & abgebaut |
+| `/pelldata stats killed` | Mobs killed / Getötete Mobs |
+| `/pelldata stats pvp` | PvP kills |
+| `/pelldata stats deaths` | Death count / Tode |
+| `/pelldata stats playtime` | Total playtime / Spielzeit |
+| `/pelldata stats chat` | Chat message count / Chatnachrichten |
+| `/pelldata stats all` | All stats |
+| `/pelldata stats topplaced` | Top 10 placed blocks |
+| `/pelldata stats topbroken` | Top 10 broken blocks |
+| `/pelldata stats topmobs` | Top 10 killed mob types |
+| `/pelldata ranking <type>` | Leaderboard / Rangliste |
+| `/pelldata player <name>` | Other player’s stats |
+| `/pelldata globalstats` | Global server statistics |
+| `/pelldata reset <name>` | Reset stats (with permission) |
+
+---
+
+## 🔐 Permissions / Berechtigungen
 
 | Permission | Description |
 |------------|-------------|
-| `pelldata.reset` | Allows resetting another player's stats (`/pelldata reset`) |
+| `pelldata.reset` | Allows resetting another player’s stats |
 | _default:_ `op` |
 
 ---
 
-## 📦 PlaceholderAPI Variables
+## 📦 PlaceholderAPI Variables / Variablen
 
-You can use these in any plugin that supports PlaceholderAPI (scoreboards, signs, menus, etc.)
-
-### 👤 Player-specific
+### 👤 Player
 
 ```
 %pelldata_blocks_placed%
@@ -70,17 +73,14 @@ You can use these in any plugin that supports PlaceholderAPI (scoreboards, signs
 %pelldata_chat%
 ```
 
-### 🔄 Player-specific (named)
+### 🔄 Player (named)
 
 ```
-%pelldata_blocks_placed_PlayerName%
-%pelldata_pvp_Talonachris%
+%pelldata_blocks_placed_Talonachris%
 %pelldata_chat_Notch%
 ```
 
-> These variants let you show stats of any player, even if they’re offline.
-
-### 🌍 Global statistics
+### 🌍 Global
 
 ```
 %pelldata_global_blocks_placed%
@@ -94,23 +94,19 @@ You can use these in any plugin that supports PlaceholderAPI (scoreboards, signs
 
 ---
 
-## 📁 Localization
+## 🌐 Localization / Lokalisierung
 
-Default languages: `en_us` and `de_de`  
-You can switch via `config.yml`:
+Languages: `en_us`, `de_de`  
+Sprache konfigurierbar in `config.yml`:
 
 ```yml
-language: en_us
+language: de_de
 ```
 
 ---
 
 ## 💛 Credits
 
-Developed with love by Talonachris.  
-Powered by [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/).  
-Data stored in a local **SQLite database**.  
-Every block type is tracked individually for maximum detail.
+Made by Talonachris – powered by PlaceholderAPI.  
+Built with 💡 AI, love, and the desire for better Minecraft stats.
 
-> This plugin was created 100% with the help of AI, based on my vision of a custom Minecraft stats system.  
-> If you have ideas or suggestions – feel free to share them!
