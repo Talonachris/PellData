@@ -1,9 +1,9 @@
 ![PellData Banner](./A_2D_digital_graphic_banner_displays_promotional_i.png)
 
-# PellData – Spigot 1.21.4 Statistics Plugin
+# PellData – Spigot 1.21.5 Statistics Plugin
 
-![Spigot](https://img.shields.io/badge/spigot-1.21.4-orange)
-![Java](https://img.shields.io/badge/java-24-brightgreen)
+![Spigot](https://img.shields.io/badge/spigot-1.21.5-orange)
+![Java](https://img.shields.io/badge/java-21-brightgreen)
 
 ---
 
