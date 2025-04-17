@@ -1,0 +1,63 @@
+# PellData - Custom Locale File
+# Set 'language: custom' in config.yml to use this file.
+#
+# Available placeholders (use them in messages where supported):
+# {prefix}     → the configured prefix (can contain colors)
+# {placed}     → number of blocks placed
+# {broken}     → number of blocks broken
+# {killed}     → number of mobs killed
+# {pvp}        → number of PvP kills
+# {deaths}     → number of deaths
+# {playtime}   → formatted time like 1h 25m
+# {chat}       → number of chat messages
+# {name}       → player name
+# {rank}       → rank position in top lists
+# {value}      → stat value (e.g. amount of blocks or kills)
+# {type}       → ranking type (placed, broken, pvp...)
+
+prefix: "&e[Pelldata] &r" # Prefix shown before most messages
+
+help:
+  usage: "{prefix}&7Use &e/pelldata &7to view statistics." # Shown if no args
+  stats:
+    usage: "{prefix}&7Use &e/pelldata stats <type> &7to view your own stats."
+  ranking:
+    usage: "{prefix}&7Use &e/pelldata ranking <type> &7to view the leaderboard."
+  player:
+    usage: "{prefix}&7Use &e/pelldata player <name> &7to see another player's stats."
+  reset:
+    usage: "{prefix}&7Use &e/pelldata reset <name> &7to reset a player's stats."
+
+error:
+  unknown_subcommand: "{prefix}&cUnknown subcommand." # Invalid argument
+  invalid_type: "{prefix}&cInvalid type. Use placed, killed, playtime, etc."
+  not_player: "{prefix}&cOnly players can use this command."
+  no_permission: "{prefix}&cYou do not have permission to do this."
+  player_not_found: "{prefix}&cThe specified player could not be found."
+  reset_failed: "{prefix}&cCould not reset the player's stats."
+
+stats:
+  blocks: "{prefix}&7Blocks placed: &a{placed} &7| broken: &c{broken}" # Combined block stats
+  killed: "{prefix}&7Mobs killed: &c{killed}"
+  pvp: "{prefix}&7PvP kills: &c{pvp}"
+  deaths: "{prefix}&7Deaths: &c{deaths}"
+  playtime: "{prefix}&7Playtime: &b{playtime}"
+  chat: "{prefix}&7Chat messages: &d{chat}"
+  all:
+    title: "" # Leave empty to disable "Your Stats" title
+  global:
+    title: "&6--- Global Statistics ---" # Header for /pelldata globalstats
+  player:
+    title: "&6–– Stats: {name} ––" # Header when viewing another player
+  reset:
+    success: "{prefix}&aStats for &e{name} &ahave been reset."
+
+top:
+  placed_title: "&6––– Top 10 placed blocks –––"
+  broken_title: "&6––– Top 10 broken blocks –––"
+  mobs_title: "&6––– Top 10 killed mobs –––"
+  mobs_none: "&7You haven't killed &cany &7mobs yet."
+
+ranking:
+  title: "&6––– Top 10 {type} –––"
+  entry: "&e#{rank}. &f{name} &7– &a{value}" # Each entry in ranking list

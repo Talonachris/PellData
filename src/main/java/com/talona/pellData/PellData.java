@@ -16,10 +16,10 @@ public class PellData extends JavaPlugin {
 
         // PlaceholderAPI registrieren
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            getLogger().info("PlaceholderAPI gefunden – Placeholder werden registriert...");
+            getLogger().info(locales.get(null, "plugin.placeholderapi.found"));
             new PellPlaceholders(db).register();
         } else {
-            getLogger().warning("PlaceholderAPI nicht gefunden – Platzhalter werden nicht funktionieren.");
+            getLogger().warning(locales.get(null, "plugin.placeholderapi.not_found"));
         }
 
         // Listener
@@ -39,6 +39,6 @@ public class PellData extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getLogger().info("PellData shutted down!");
+        getLogger().info(locales.get(null, "plugin.shutdown"));
     }
 }

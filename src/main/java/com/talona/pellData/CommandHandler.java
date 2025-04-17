@@ -186,7 +186,7 @@ public class CommandHandler implements CommandExecutor {
 
     private void showTopPlaced(Player player) {
         Map<String, Integer> top = db.getTopPlacedBlocks(player.getUniqueId().toString());
-        player.sendMessage("§6Top 10 gesetzte Blöcke:");
+        player.sendMessage(locales.get(player, "top.placed_title"));
         int i = 1;
         for (var entry : top.entrySet()) {
             player.sendMessage("§e" + i++ + ". " + entry.getKey() + " – " + entry.getValue());
@@ -195,7 +195,7 @@ public class CommandHandler implements CommandExecutor {
 
     private void showTopBroken(Player player) {
         Map<String, Integer> top = db.getTopBrokenBlocks(player.getUniqueId().toString());
-        player.sendMessage("§6Top 10 abgebaut:");
+        player.sendMessage(locales.get(player, "top.broken_title"));
         int i = 1;
         for (var entry : top.entrySet()) {
             player.sendMessage("§e" + i++ + ". " + entry.getKey() + " – " + entry.getValue());
@@ -205,11 +205,11 @@ public class CommandHandler implements CommandExecutor {
     private void showTopMobs(Player player) {
         Map<String, Integer> top = db.getTopKilledMobs(player.getUniqueId().toString());
         if (top.isEmpty()) {
-            player.sendMessage("§7Du hast bisher keine Mobs getötet.");
+            player.sendMessage(locales.get(player, "top.mobs_none"));
             return;
         }
 
-        player.sendMessage("§6Top 10 getötete Mobs:");
+        player.sendMessage(locales.get(player, "top.mobs_title"));
         int i = 1;
         for (var entry : top.entrySet()) {
             player.sendMessage("§e" + i++ + ". §f" + entry.getKey() + " – " + entry.getValue());
@@ -231,7 +231,7 @@ public class CommandHandler implements CommandExecutor {
     }
 
     private void showRanking(Player player, String type) {
-        player.sendMessage("§6Top 10 – " + type + ":");
+        player.sendMessage(locales.get(player, "ranking.title").replace("{type}", type));
         for (int i = 0; i < 10; i++) {
             String[] entry = db.getTopStats(type, i);
             if (entry != null) {
@@ -244,7 +244,7 @@ public class CommandHandler implements CommandExecutor {
                     value = formatPlaytime(Integer.parseInt(value));
                 }
 
-                player.sendMessage("§e#" + (i + 1) + " §f" + name + " §7– §a" + value);
+                player.sendMessage(locales.get(player, "ranking.entry").replace("{rank}", String.valueOf(i + 1)).replace("{name}", name).replace("{value}", value));
             }
         }
     }

@@ -1,25 +1,45 @@
-prefix: "§e[Pelldata]§7"
-
-help.usage: "Verwendung: /pelldata <stats|ranking|player|reset|globalstats>"
-help.stats.usage: "Verwendung: /pelldata stats <blocks|killed|deaths|playtime|chat|all|topplaced|topbroken|topmobs>"
-help.ranking.usage: "Verwendung: /pelldata ranking <placed|broken|killed|deaths|playtime|chat|pvp>"
-help.reset.usage: "Verwendung: /pelldata reset <Spielername>"
-help.player.usage: "Verwendung: /pelldata player <Spielername>"
-
-error.not_player: "Nur Spieler können diesen Befehl ausführen."
-error.no_permission: "§cDu hast keine Berechtigung für diesen Befehl."
-error.unknown_subcommand: "Unbekannter Subcommand. Nutze: /pelldata <stats|ranking|player|reset|globalstats>"
-error.invalid_type: "Ungültiger Typ. Verwende: placed, broken, killed, deaths, playtime, chat, pvp"
-error.player_not_found: "§cSpieler konnte nicht gefunden werden."
-error.reset_failed: "§cFehler beim Zurücksetzen."
-
-stats.blocks: "Du hast §f{placed}§7 Blöcke platziert und §f{broken}§7 abgebaut."
-stats.killed: "Du hast §f{killed}§7 NPCs getötet."
-stats.pvp: "Du hast §f{pvp}§7 Spieler getötet."
-stats.deaths: "Du bist §f{deaths}§7 mal gestorben."
-stats.playtime: "Deine Gesamtspielzeit: §f{playtime}"
-stats.chat: "Du hast §f{chat}§7 Chatnachrichten gesendet."
-stats.all.title: "§6Deine Gesamtstatistik:"
-stats.player.title: "§6Statistiken für §f{name}§6:"
-stats.global.title: "§6Globale Statistiken des Servers:"
-stats.reset.success: "§aStatistiken von §e{name} §awurden zurückgesetzt."
+error:
+  invalid_type: '&cUngültiger Statistiktyp.'
+  no_permission: '&cDu hast keine Berechtigung dafür.'
+  not_player: '&cNur Spieler können diesen Befehl nutzen.'
+  player_not_found: '&cSpieler nicht gefunden.'
+  reset_failed: '&cZurücksetzen der Statistik fehlgeschlagen.'
+  unknown_subcommand: '&cUnbekannter Unterbefehl.'
+help:
+  player:
+    usage: '&7Benutze &e/pelldata player <name> &7um Spielerstatistiken zu sehen.'
+  ranking:
+    usage: '&7Benutze &e/pelldata ranking <typ> &7für das Ranking.'
+  reset:
+    usage: '&7Benutze &e/pelldata reset <name> &7um Statistiken zurückzusetzen.'
+  stats:
+    usage: '&7Benutze &e/pelldata stats <typ> &7für deine Statistiken.'
+  usage: '&7Benutze &e/pelldata &7für Statistiken.'
+plugin:
+  placeholderapi:
+    found: '&a✔ PlaceholderAPI gefunden &7– Platzhalter werden registriert...'
+    not_found: '&c✘ PlaceholderAPI nicht gefunden &7– Platzhalter werden nicht funktionieren.'
+  shutdown: '&e[Pelldata] &7Plugin wurde deaktiviert.'
+ranking:
+  entry: '&e#{rank}. &f{name} &7– &a{value}'
+  title: '&6––– Top 10 {type} –––'
+stats:
+  all:
+    title: '&6────────────[ Deine Statistik ]────────────'
+  blocks: '&7Blöcke gesetzt: &a{placed} &7| abgebaut: &c{broken}'
+  chat: '&7Chatnachrichten: &d{chat}'
+  deaths: '&7Tode: &c{deaths}'
+  global:
+    title: '&6────────────[ Globale Statistik ]────────────'
+  killed: '&7Getötete Mobs: &c{killed}'
+  player:
+    title: '&6────────────[ Statistik von {name} ]────────────'
+  playtime: '&7Spielzeit: &b{playtime}'
+  pvp: '&7PvP-Kills: &c{pvp}'
+  reset:
+    success: '&aStatistiken von &e{name} &awurden zurückgesetzt.'
+top:
+  broken_title: '&6––– Top 10 abgebaut –––'
+  mobs_none: '&7Du hast bisher &ckeine &7Mobs getötet.'
+  mobs_title: '&6––– Top 10 getötete Mobs –––'
+  placed_title: '&6––– Top 10 gesetzte Blöcke –––'
