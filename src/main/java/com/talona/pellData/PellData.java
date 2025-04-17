@@ -23,6 +23,7 @@ public class PellData extends JavaPlugin {
         }
 
         // Listener
+        getServer().getPluginManager().registerEvents(new PvPKillListener(db), this);
         getServer().getPluginManager().registerEvents(new BlockListener(db), this);
         getServer().getPluginManager().registerEvents(new MobKillListener(db), this);
         getServer().getPluginManager().registerEvents(new DeathListener(db, locales), this);

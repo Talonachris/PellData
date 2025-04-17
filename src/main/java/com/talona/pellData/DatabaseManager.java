@@ -444,4 +444,27 @@ public class DatabaseManager {
         }
         return 0;
     }
+    public String getUUIDFromName(String name) {
+        for (String uuid : getAllStoredUUIDs()) {
+            OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
+            if (p.getName() != null && p.getName().equalsIgnoreCase(name)) {
+                return uuid;
+            }
+        }
+        return null;
+    }
+
+    public List<String> getAllStoredUUIDs() {
+        List<String> uuids = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement("SELECT uuid FROM player_stats")) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                uuids.add(rs.getString("uuid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return uuids;
+    }
+
 }

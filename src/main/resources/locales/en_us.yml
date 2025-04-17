@@ -14,7 +14,7 @@ error.player_not_found: "§cPlayer not found."
 error.reset_failed: "§cReset failed."
 
 stats.blocks: "You placed §f{placed}§7 blocks and broke §f{broken}§7 blocks."
-stats.killed: "You killed §f{killed}§7 mobs."
+stats.killed: "You killed §f{killed}§7 NPCs."
 stats.pvp: "You killed §f{pvp}§7 players."
 stats.deaths: "You died §f{deaths}§7 times."
 stats.playtime: "Your total playtime: §f{playtime}"

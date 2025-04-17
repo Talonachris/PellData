@@ -13,8 +13,8 @@ error.invalid_type: "Ungültiger Typ. Verwende: placed, broken, killed, deaths, 
 error.player_not_found: "§cSpieler konnte nicht gefunden werden."
 error.reset_failed: "§cFehler beim Zurücksetzen."
 
-stats.blocks: "Du hast §f{placed}§7 Blöcke gesetzt und §f{broken}§7 abgebaut."
-stats.killed: "Du hast §f{killed}§7 Mobs getötet."
+stats.blocks: "Du hast §f{placed}§7 Blöcke platziert und §f{broken}§7 abgebaut."
+stats.killed: "Du hast §f{killed}§7 NPCs getötet."
 stats.pvp: "Du hast §f{pvp}§7 Spieler getötet."
 stats.deaths: "Du bist §f{deaths}§7 mal gestorben."
 stats.playtime: "Deine Gesamtspielzeit: §f{playtime}"
