@@ -95,7 +95,7 @@ language: en_us   # en_us | de_de …
 ---
 
 ### 🌐 Localisation
-English file **`en_us.yml`** is loaded by default. Copy it (e.g. as `de_de.yml`) and translate – keep `&` colour codes & placeholders **as is**.
+English file **`en_us.yml`** is loaded by default. Copy it (e.g. as `de_de.yml`) and translate – keep colour codes & placeholders **as is**.
 
 ---
 
@@ -117,10 +117,10 @@ The **entire** plugin was built fully with the help of AI – from the very fir
 ---
 
 ### ✨ Funktionen
-- **Block‑Statistiken** – gesetzte & abgebaut Blöcke (gesamt & pro Typ) mit *Top*‑Listen und Ranglisten.
+- **Block‑Statistiken** – gesetzte & abgebaute Blöcke (gesamt & pro Typ) mit *Top*‑Listen und Ranglisten.
 - **Mob‑ & PvP‑Kills** – getrennte Zähler inkl. *Top* getötete Mob‑Typen.
 - **Tode** – Spielertode.
-- **Spielzeit (AFK‑Filter)** – +5 s alle 5 s, solange der Spieler ≤ 10 Min. aktiv ist.
+- **Spielzeit (AFK‑Filter)** – alle 5 s, solange der Spieler ≤ 10 Min. aktiv ist.
 - **Chatnachrichten** – Anzahl gesendeter Nachrichten.
 - **Globale Statistiken** – `/pelldata globalstats` fasst alle Spieler zusammen.
 - **Ranglisten** – `/pelldata ranking <typ>` zeigt globale Top 10.
@@ -200,7 +200,7 @@ language: de_de   # de_de | en_us …
 ---
 
 ### 🌐 Lokalisierung
-Die englische Datei **`en_us.yml`** wird standardmäßig geladen. Kopiere sie z. B. als `de_de.yml`, übersetze die Texte – `&`‑Farbcodes & Platzhalter **unverändert** lassen.
+Die englische Datei **`en_us.yml`** wird standardmäßig geladen. Kopiere sie z. B. als `de_de.yml`, übersetze die Texte -Farbcodes & Platzhalter **unverändert** lassen.
 
 ---
 
