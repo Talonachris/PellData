@@ -1,45 +1,76 @@
-error:
-  invalid_type: '&cInvalid statistics type.'
-  no_permission: '&cYou don''t have permission for that.'
-  not_player: '&cOnly players can use this command.'
-  player_not_found: '&cPlayer not found.'
-  reset_failed: '&cFailed to reset statistics.'
-  unknown_subcommand: '&cUnknown subcommand.'
+prefix: "&e[Pelldata] &r"
+
 help:
-  player:
-    usage: '&7Use &e/pelldata player <name> &7to view player stats.'
-  ranking:
-    usage: '&7Use &e/pelldata ranking <type> &7to view the leaderboard.'
-  reset:
-    usage: '&7Use &e/pelldata reset <name> &7to reset stats.'
+  usage: "{prefix}&7Use &e/pelldata &7to view statistics."
   stats:
-    usage: '&7Use &e/pelldata stats <type> &7to view your stats.'
-  usage: '&7Use &e/pelldata &7to view statistics.'
-plugin:
-  placeholderapi:
-    found: '&a✔ PlaceholderAPI detected &7– registering placeholders...'
-    not_found: '&c✘ PlaceholderAPI not found &7– placeholders will not work.'
-  shutdown: '&e[Pelldata] &7Plugin has been disabled.'
-ranking:
-  entry: '&e#{rank}. &f{name} &7– &a{value}'
-  title: '&6––– Top 10 {type} –––'
-stats:
-  all:
-    title: '&6────────────[ Your Statistics ]────────────'
-  blocks: '&7Blocks placed: &a{placed} &7| broken: &c{broken}'
-  chat: '&7Chat messages: &d{chat}'
-  deaths: '&7Deaths: &c{deaths}'
-  global:
-    title: '&6────────────[ Global Statistics ]────────────'
-  killed: '&7Mobs killed: &c{killed}'
+    usage: "{prefix}&7Use &e/pelldata stats <type> &7to view your own stats."
+  ranking:
+    usage: "{prefix}&7Use &e/pelldata ranking <type> &7to view the leaderboard."
   player:
-    title: '&6────────────[ Stats of {name} ]────────────'
-  playtime: '&7Playtime: &b{playtime}'
-  pvp: '&7PvP kills: &c{pvp}'
+    usage: "{prefix}&7Use &e/pelldata player <name> &7to see another player's stats."
   reset:
-    success: '&aStatistics of &e{name} &ahave been reset.'
-top:
-  broken_title: '&6––– Top 10 broken blocks –––'
-  mobs_none: '&7You haven''t killed &cany &7mobs yet.'
-  mobs_title: '&6––– Top 10 killed mobs –––'
-  placed_title: '&6––– Top 10 placed blocks –––'
+    usage: "{prefix}&7Use &e/pelldata reset <name> &7to reset a player's stats."
+
+error:
+  unknown_subcommand: "{prefix}&cUnknown subcommand."
+  invalid_type: "{prefix}&cInvalid type. Use placed, killed, playtime, etc."
+  not_player: "{prefix}&cOnly players can use this command."
+  no_permission: "{prefix}&cYou do not have permission to do this."
+  player_not_found: "{prefix}&cThe specified player could not be found."
+  reset_failed: "{prefix}&cCould not reset the player's stats."
+
+stats:
+  blocks: "{prefix}&7Blocks placed: &a{placed} &7| broken: &c{broken}"
+  killed: "{prefix}&7Mobs killed: &c{killed}"
+  pvp: "{prefix}&7PvP kills: &c{pvp}"
+  deaths: "{prefix}&7Deaths: &c{deaths}"
+  playtime: "{prefix}&7Playtime: &b{playtime}"
+  chat: "{prefix}&7Chat messages: &d{chat}"
+  all:
+    title: ""
+  global:
+    title: "&6--- Global Statistics ---"
+  player:
+    title: "&6---[ {name} ]---"
+  reset:
+    success: "{prefix}&aStats for &e{name} &ahave been reset."
+
+menu:
+  title: "&8Your Statistics"
+  back: "&c← Back"
+
+  stats:
+    blocks:
+      name: "&aBlocks"
+      lore:
+        - "&7Placed: &a{placed}"
+        - "&7Broken: &c{broken}"
+    mobs:
+      name: "&cMobs"
+      lore:
+        - "&7Mobs killed: &c{killed}"
+    pvp:
+      name: "&6PvP"
+      lore:
+        - "&7PvP kills: &c{pvp}"
+    deaths:
+      name: "&7Deaths"
+      lore:
+        - "&7Deaths: &c{deaths}"
+    playtime:
+      name: "&ePlaytime"
+      lore:
+        - "&7Playtime: &b{playtime}"
+    chat:
+      name: "&dChat"
+      lore:
+        - "&7Messages sent: &d{chat}"
+    global:
+      name: "&9Global Stats"
+      lore:
+        - "&7View total stats from all players"
+
+  ranking:
+    title: "&6Top 10 {type}"
+    entry: "&e#{rank} &f{name} &7– &a{value}"
+    value_only: "{type}: {value}"

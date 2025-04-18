@@ -1,63 +1,82 @@
-# PellData - Custom Locale File
+# PellData - Custom Locale Reference File
 # Set 'language: custom' in config.yml to use this file.
-#
-# Available placeholders (use them in messages where supported):
-# {prefix}     → the configured prefix (can contain colors)
-# {placed}     → number of blocks placed
-# {broken}     → number of blocks broken
-# {killed}     → number of mobs killed
-# {pvp}        → number of PvP kills
-# {deaths}     → number of deaths
-# {playtime}   → formatted time like 1h 25m
-# {chat}       → number of chat messages
-# {name}       → player name
-# {rank}       → rank position in top lists
-# {value}      → stat value (e.g. amount of blocks or kills)
-# {type}       → ranking type (placed, broken, pvp...)
+# This file contains all possible messages used by the plugin.
+# Each line is explained so translators know what it does.
 
-prefix: "&e[Pelldata] &r" # Prefix shown before most messages
+# Prefix used before most messages
+prefix: "&e[Pelldata] &r" # General message prefix in chat
 
 help:
-  usage: "{prefix}&7Use &e/pelldata &7to view statistics." # Shown if no args
+  usage: "{prefix}&7Use &e/pelldata &7to view statistics." # Shown when player runs /pelldata without arguments
   stats:
-    usage: "{prefix}&7Use &e/pelldata stats <type> &7to view your own stats."
+    usage: "{prefix}&7Use &e/pelldata stats <type> &7to view your own stats." # Help for /pelldata stats
   ranking:
-    usage: "{prefix}&7Use &e/pelldata ranking <type> &7to view the leaderboard."
+    usage: "{prefix}&7Use &e/pelldata ranking <type> &7to view the leaderboard." # Help for /pelldata ranking
   player:
-    usage: "{prefix}&7Use &e/pelldata player <name> &7to see another player's stats."
+    usage: "{prefix}&7Use &e/pelldata player <name> &7to view another player's stats." # Help for /pelldata player
   reset:
-    usage: "{prefix}&7Use &e/pelldata reset <name> &7to reset a player's stats."
+    usage: "{prefix}&7Use &e/pelldata reset <name> &7to reset a player's stats." # Help for /pelldata reset
 
 error:
-  unknown_subcommand: "{prefix}&cUnknown subcommand." # Invalid argument
-  invalid_type: "{prefix}&cInvalid type. Use placed, killed, playtime, etc."
-  not_player: "{prefix}&cOnly players can use this command."
-  no_permission: "{prefix}&cYou do not have permission to do this."
-  player_not_found: "{prefix}&cThe specified player could not be found."
-  reset_failed: "{prefix}&cCould not reset the player's stats."
+  unknown_subcommand: "{prefix}&cUnknown subcommand." # When user enters an invalid subcommand
+  invalid_type: "{prefix}&cInvalid type. Use placed, killed, playtime, etc." # When the stat type is wrong
+  not_player: "{prefix}&cOnly players can use this command." # When console tries to run a player-only command
+  no_permission: "{prefix}&cYou do not have permission to do this." # When player lacks required permission
+  player_not_found: "{prefix}&cThe specified player could not be found." # When a player name does not exist
+  reset_failed: "{prefix}&cCould not reset the player's stats." # When /reset fails
 
 stats:
-  blocks: "{prefix}&7Blocks placed: &a{placed} &7| broken: &c{broken}" # Combined block stats
-  killed: "{prefix}&7Mobs killed: &c{killed}"
-  pvp: "{prefix}&7PvP kills: &c{pvp}"
-  deaths: "{prefix}&7Deaths: &c{deaths}"
-  playtime: "{prefix}&7Playtime: &b{playtime}"
-  chat: "{prefix}&7Chat messages: &d{chat}"
+  blocks: "{prefix}&7Blocks placed: &a{placed} &7| broken: &c{broken}" # Shows blocks placed and broken
+  killed: "{prefix}&7Mobs killed: &c{killed}" # Total mobs killed
+  pvp: "{prefix}&7PvP kills: &c{pvp}" # Total PvP kills
+  deaths: "{prefix}&7Deaths: &c{deaths}" # Total deaths
+  playtime: "{prefix}&7Playtime: &b{playtime}" # Total playtime in formatted time
+  chat: "{prefix}&7Chat messages: &d{chat}" # Total messages sent
   all:
-    title: "" # Leave empty to disable "Your Stats" title
+    title: "" # Unused title for /pelldata stats all (left blank)
   global:
     title: "&6--- Global Statistics ---" # Header for /pelldata globalstats
   player:
-    title: "&6–– Stats: {name} ––" # Header when viewing another player
+    title: "&6---[ {name} ]---" # Header for /pelldata player <name>
   reset:
-    success: "{prefix}&aStats for &e{name} &ahave been reset."
+    success: "{prefix}&aStats for &e{name} &ahave been reset." # Success message after resetting stats
 
-top:
-  placed_title: "&6––– Top 10 placed blocks –––"
-  broken_title: "&6––– Top 10 broken blocks –––"
-  mobs_title: "&6––– Top 10 killed mobs –––"
-  mobs_none: "&7You haven't killed &cany &7mobs yet."
+menu:
+  title: "&8Your Statistics" # Title of the main GUI menu
+  back: "&c← Back" # Back button label in GUIs
 
-ranking:
-  title: "&6––– Top 10 {type} –––"
-  entry: "&e#{rank}. &f{name} &7– &a{value}" # Each entry in ranking list
+  stats:
+    blocks:
+      name: "&aBlocks" # GUI item for block stats
+      lore:
+        - "&7Placed: &a{placed}" # Lore line showing blocks placed
+        - "&7Broken: &c{broken}" # Lore line showing blocks broken
+    mobs:
+      name: "&cMobs" # GUI item for mob stats
+      lore:
+        - "&7Mobs killed: &c{killed}" # Lore line showing mobs killed
+    pvp:
+      name: "&6PvP" # GUI item for PvP stats
+      lore:
+        - "&7PvP kills: &c{pvp}" # Lore line showing PvP kills
+    deaths:
+      name: "&7Deaths" # GUI item for deaths
+      lore:
+        - "&7Deaths: &c{deaths}" # Lore line showing deaths
+    playtime:
+      name: "&ePlaytime" # GUI item for playtime
+      lore:
+        - "&7Playtime: &b{playtime}" # Lore line showing formatted playtime
+    chat:
+      name: "&dChat" # GUI item for chat messages
+      lore:
+        - "&7Messages sent: &d{chat}" # Lore line showing total chat messages
+    global:
+      name: "&9Global Stats" # GUI item for global stats
+      lore:
+        - "&7View total stats from all players" # Lore line for global stats button
+
+  ranking:
+    title: "&6Top 10 {type}" # GUI title for ranking menu, type = placed, pvp, etc.
+    entry: "&e#{rank} &f{name} &7– &a{value}" # Unused (for legacy), full entry with name
+    value_only: "{type}: {value}" # Lore line for skulls showing value only

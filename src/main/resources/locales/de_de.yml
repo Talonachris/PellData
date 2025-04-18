@@ -1,45 +1,76 @@
-error:
-  invalid_type: '&cUngültiger Statistiktyp.'
-  no_permission: '&cDu hast keine Berechtigung dafür.'
-  not_player: '&cNur Spieler können diesen Befehl nutzen.'
-  player_not_found: '&cSpieler nicht gefunden.'
-  reset_failed: '&cZurücksetzen der Statistik fehlgeschlagen.'
-  unknown_subcommand: '&cUnbekannter Unterbefehl.'
+prefix: "&e[Pelldata] &r"
+
 help:
-  player:
-    usage: '&7Benutze &e/pelldata player <name> &7um Spielerstatistiken zu sehen.'
-  ranking:
-    usage: '&7Benutze &e/pelldata ranking <typ> &7für das Ranking.'
-  reset:
-    usage: '&7Benutze &e/pelldata reset <name> &7um Statistiken zurückzusetzen.'
+  usage: "{prefix}Nutze &e/pelldata &7für Statistiken."
   stats:
-    usage: '&7Benutze &e/pelldata stats <typ> &7für deine Statistiken.'
-  usage: '&7Benutze &e/pelldata &7für Statistiken.'
-plugin:
-  placeholderapi:
-    found: '&a✔ PlaceholderAPI gefunden &7– Platzhalter werden registriert...'
-    not_found: '&c✘ PlaceholderAPI nicht gefunden &7– Platzhalter werden nicht funktionieren.'
-  shutdown: '&e[Pelldata] &7Plugin wurde deaktiviert.'
-ranking:
-  entry: '&e#{rank}. &f{name} &7– &a{value}'
-  title: '&6––– Top 10 {type} –––'
-stats:
-  all:
-    title: '&6────────────[ Deine Statistik ]────────────'
-  blocks: '&7Blöcke gesetzt: &a{placed} &7| abgebaut: &c{broken}'
-  chat: '&7Chatnachrichten: &d{chat}'
-  deaths: '&7Tode: &c{deaths}'
-  global:
-    title: '&6────────────[ Globale Statistik ]────────────'
-  killed: '&7Getötete Mobs: &c{killed}'
+    usage: "{prefix}Nutze &e/pelldata stats <typ> &7um deine eigenen Werte zu sehen."
+  ranking:
+    usage: "{prefix}Nutze &e/pelldata ranking <typ> &7um die Bestenliste zu sehen."
   player:
-    title: '&6────────────[ Statistik von {name} ]────────────'
-  playtime: '&7Spielzeit: &b{playtime}'
-  pvp: '&7PvP-Kills: &c{pvp}'
+    usage: "{prefix}Nutze &e/pelldata player <name> &7um Werte anderer Spieler zu sehen."
   reset:
-    success: '&aStatistiken von &e{name} &awurden zurückgesetzt.'
-top:
-  broken_title: '&6––– Top 10 abgebaut –––'
-  mobs_none: '&7Du hast bisher &ckeine &7Mobs getötet.'
-  mobs_title: '&6––– Top 10 getötete Mobs –––'
-  placed_title: '&6––– Top 10 gesetzte Blöcke –––'
+    usage: "{prefix}Nutze &e/pelldata reset <name> &7um Werte zurückzusetzen."
+
+error:
+  unknown_subcommand: "{prefix}&cUnbekannter Befehl."
+  invalid_type: "{prefix}&cUngültiger Typ. Nutze z. B. placed, killed, playtime."
+  not_player: "{prefix}&cNur Spieler können diesen Befehl ausführen."
+  no_permission: "{prefix}&cDu hast keine Berechtigung dafür."
+  player_not_found: "{prefix}&cSpieler wurde nicht gefunden."
+  reset_failed: "{prefix}&cStatistiken konnten nicht zurückgesetzt werden."
+
+stats:
+  blocks: "{prefix}&7Gesetzt: &a{placed} &7| Abgebaut: &c{broken}"
+  killed: "{prefix}&7Getötete Mobs: &c{killed}"
+  pvp: "{prefix}&7PvP-Kills: &c{pvp}"
+  deaths: "{prefix}&7Tode: &c{deaths}"
+  playtime: "{prefix}&7Spielzeit: &b{playtime}"
+  chat: "{prefix}&7Nachrichten: &d{chat}"
+  all:
+    title: ""
+  global:
+    title: "&6--- Globale Statistiken ---"
+  player:
+    title: "&6---[ {name} ]---"
+  reset:
+    success: "{prefix}&aStatistiken von &e{name} &awurden zurückgesetzt."
+
+menu:
+  title: "&8Deine Statistiken"
+  back: "&c← Zurück"
+
+  stats:
+    blocks:
+      name: "&aBlöcke"
+      lore:
+        - "&7Gesetzt: &a{placed}"
+        - "&7Abgebaut: &c{broken}"
+    mobs:
+      name: "&cMobs"
+      lore:
+        - "&7Getötete Mobs: &c{killed}"
+    pvp:
+      name: "&6PvP"
+      lore:
+        - "&7PvP-Kills: &c{pvp}"
+    deaths:
+      name: "&7Tode"
+      lore:
+        - "&7Tode: &c{deaths}"
+    playtime:
+      name: "&eSpielzeit"
+      lore:
+        - "&7Spielzeit: &b{playtime}"
+    chat:
+      name: "&dChat"
+      lore:
+        - "&7Nachrichten gesendet: &d{chat}"
+    global:
+      name: "&9Globale Stats"
+      lore:
+        - "&7Zeigt Gesamtwerte aller Spieler"
+
+  ranking:
+    title: "&6Top 10 {type}"
+    entry: "&e#{rank} &f{name} &7– &a{value}"
+    value_only: "{type}: {value}"
