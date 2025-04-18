@@ -22,6 +22,7 @@
 - **Chat messages** – counts chat lines written.
 - **Global stats** – `/pelldata globalstats` summarises everyone.
 - **Rankings** – `/pelldata ranking <type>` shows global Top 10.
+- **Visual GUI Menu** – Access your stats and rankings through a fully interactive inventory menu using `/pelldata menu`. All texts are translatable, and items are beautifully styled and non-movable.  
 - **PlaceholderAPI** – personal, global & per‑player placeholders.
 - **Localisation** – translatable via `locales/en_us.yml`, `locales/de_de.yml`, …
 
@@ -51,7 +52,9 @@ language: en_us   # en_us | de_de | custom ...
 | `/pelldata player <name>` | – | Another player’s stats |
 | `/pelldata reset <name>` | `pelldata.reset` | Reset a player’s stats |
 | `/pelldata globalstats` | – | Combined server statistics |
+| `/pelldata menu` | – | Opens the graphical statistics menu |
 
+  
 ---
 
 ### 📚 PlaceholderAPI Variables
@@ -129,6 +132,7 @@ The **entire** plugin was built fully with the help of AI – from the very firs
 - **Chatnachrichten** – Anzahl gesendeter Nachrichten.
 - **Globale Statistiken** – `/pelldata globalstats` fasst alle Spieler zusammen.
 - **Ranglisten** – `/pelldata ranking <typ>` zeigt globale Top 10.
+- **Visuelles GUI-Menü** – Zeigt alle Statistiken direkt im Inventar per `/pelldata menu`. Farben, Texte und Navigation sind vollständig übersetzbar – mit Rankings, Zurück-Button und fixierten Items.
 - **PlaceholderAPI** – persönliche, globale & spielerbezogene Platzhalter.
 - **Lokalisierung** – Übersetzbar via `locales/en_us.yml`, `locales/de_de.yml` …
 
@@ -158,7 +162,9 @@ language: de_de   # de_de | en_us | custom ...
 | `/pelldata player <name>` | – | Stats eines anderen Spielers |
 | `/pelldata reset <name>` | `pelldata.reset` | Stats eines Spielers zurücksetzen |
 | `/pelldata globalstats` | – | Gesamte Server‑Statistiken |
+| `/pelldata menu` | – | Öffnet das grafische Statistik-Menü |
 
+  
 ---
 
 ### 📚 PlaceholderAPI‑Variablen
